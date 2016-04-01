@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://hellopony.cn/"/>
-  <updated>2016-04-01T03:53:22.000Z</updated>
+  <updated>2016-04-01T06:32:15.000Z</updated>
   <id>http://hellopony.cn/</id>
   
   <author>
@@ -19,8 +19,8 @@
     <title>Android WebView相关姿势</title>
     <link href="http://hellopony.cn/2016/04/01/Android%20WebView%E7%9B%B8%E5%85%B3%E5%A7%BF%E5%8A%BF/"/>
     <id>http://hellopony.cn/2016/04/01/Android WebView相关姿势/</id>
-    <published>2016-04-01T03:53:22.000Z</published>
-    <updated>2016-04-01T03:53:22.000Z</updated>
+    <published>2016-04-01T06:32:15.000Z</published>
+    <updated>2016-04-01T06:32:15.000Z</updated>
     
     <content type="html">&lt;p&gt;在Android项目开发中，WebView的使用都是必不可少的。在一个基本功能完备的项目中，都会把WebView提取成一个公用的Activity组件，在需要跳转到H5页面的地方启动这个activity并传入相关参数即可。这样的简便快捷的使用，却容易造成开发者对WebView相关知识的疏忽。遂成此文，整理一二。&lt;/p&gt;
 &lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
@@ -34,7 +34,7 @@
 &lt;h2 id=&quot;在WebView中使用JavaScript&quot;&gt;在WebView中使用JavaScript&lt;/h2&gt;&lt;p&gt;默认情况下，WebView是禁用JavaScript的。通过如下代码来为WebView开启JavaScript支持&lt;/p&gt;
 &lt;figure class=&quot;highlight dns&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;WebSettings webSettings = webView.getSettings()&lt;span class=&quot;comment&quot;&gt;;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;webSettings.setJavaScriptEnabled(true)&lt;span class=&quot;comment&quot;&gt;;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
 &lt;p&gt;WebSettings管理着很多很有用的WebView设置项，例如setUserAgentString()等。具体细节可戳  &lt;a href=&quot;http://androiddoc.qiniudn.com/reference/android/webkit/WebSettings.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;WebSettings Doc&lt;/a&gt;.&lt;/p&gt;
-&lt;h3 id=&quot;WebView与JavaScript的交互*&quot;&gt;WebView与JavaScript的交互*&lt;/h3&gt;&lt;p&gt;WebView属Android端，所以该交互问题就是Android本地与JS端的交互问题。为了便于梳理，写了如图所示的一个Demo，上半部分白底为WebView，加载本地的一个html页面，内含一个button和一个h1；下半部分是Android上的一个Button。 &lt;a href=&quot;https://github.com/ponywei/WebViewJSDemo&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Demo code&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;WebView与JavaScript的交互*&quot;&gt;WebView与JavaScript的交互*&lt;/h3&gt;&lt;p&gt;WebView属Android端，所以该交互问题就是Android本地与JS端的交互问题。为了便于梳理，写了如图所示的一个Demo &lt;a href=&quot;https://github.com/ponywei/WebViewJSDemo&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Source code&lt;/a&gt;，上半部分白底为WebView，加载本地的一个html页面，内含一个button和一个h1；下半部分是Android上的一个Button。 &lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;http://7u2h4k.com1.z0.glb.clouddn.com/2016-03-31%2017.55.55.png&quot; alt=&quot;屏幕截图&quot;&gt;&lt;/p&gt;
 &lt;h3 id=&quot;WebView调用JavaScript的方法&quot;&gt;WebView调用JavaScript的方法&lt;/h3&gt;&lt;p&gt;WebView调用JavaScript的方法相对比较简单，如果是无参数方法：&lt;/p&gt;
 &lt;figure class=&quot;highlight stylus&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;webView.&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;title&quot;&gt;loadUrl&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;(&lt;span class=&quot;string&quot;&gt;&quot;javascript:METHOD&quot;&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
@@ -58,6 +58,10 @@
 &lt;figure class=&quot;highlight actionscript&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;webView.setWebViewClient(&lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; MyWebViewClient());&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
 &lt;h2 id=&quot;WebView历史导航&quot;&gt;WebView历史导航&lt;/h2&gt;&lt;p&gt;如果WebView重新加载了其他的URL，那么它会自动累加保存一个页面历史记录。可以通过 goBack() 和 goForward() 方法来进行历史导航。&lt;br&gt;如下代码，在activity中重写onKeyDown方法来处理返回按键的逻辑，其中 canGoBack() 用来判断是否还有历史页面可以返回，类似的还有 canGoForward()。如果用户按下返回键且存在可返回的历史页面，WebView回退到上一个历史页面。&lt;/p&gt;
 &lt;figure class=&quot;highlight aspectj&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;annotation&quot;&gt;@Override&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;onKeyDown&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;(&lt;span class=&quot;keyword&quot;&gt;int&lt;/span&gt; keyCode, KeyEvent event)&lt;/span&gt; &lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;comment&quot;&gt;// Check if the key event was the Back button and if there&#39;s history&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; ((keyCode == KeyEvent.KEYCODE_BACK) &amp;amp;&amp;amp; myWebView.canGoBack()) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        myWebView.goBack();&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;true&lt;/span&gt;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;comment&quot;&gt;// If it wasn&#39;t the Back key or there&#39;s no web page history, bubble up to the default&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;comment&quot;&gt;// system behavior (probably exit the activity)&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;super&lt;/span&gt;.&lt;span class=&quot;title&quot;&gt;onKeyDown&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;(keyCode, event)&lt;/span&gt;&lt;/span&gt;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h2 id=&quot;参考资料&quot;&gt;参考资料&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://mthli.github.io/Android-WebView-JavaScript&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Android WebView 与 JavaScript 交互&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://developer.android.com/intl/zh-cn/guide/webapps/webview.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Building Web Apps in WebView&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 </content>
     
     <summary type="html">
