@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>HelloPony</title>
+  <subtitle>Why so Serious?</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://hellopony.cn/"/>
+  <updated>2016-04-01T03:53:22.000Z</updated>
+  <id>http://hellopony.cn/</id>
+  
+  <author>
+    <name>PONY WEI</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Android WebView相关姿势</title>
+    <link href="http://hellopony.cn/2016/04/01/Android%20WebView%E7%9B%B8%E5%85%B3%E5%A7%BF%E5%8A%BF/"/>
+    <id>http://hellopony.cn/2016/04/01/Android WebView相关姿势/</id>
+    <published>2016-04-01T03:53:22.000Z</published>
+    <updated>2016-04-01T03:53:22.000Z</updated>
+    
+    <content type="html">&lt;p&gt;在Android项目开发中，WebView的使用都是必不可少的。在一个基本功能完备的项目中，都会把WebView提取成一个公用的Activity组件，在需要跳转到H5页面的地方启动这个activity并传入相关参数即可。这样的简便快捷的使用，却容易造成开发者对WebView相关知识的疏忽。遂成此文，整理一二。&lt;/p&gt;
+&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+&lt;h2 id=&quot;添加WebView&quot;&gt;添加WebView&lt;/h2&gt;&lt;p&gt;在应用中使用WebView，只需要在layout文件中添加&lt;/p&gt;
+&lt;figure class=&quot;highlight applescript&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&amp;lt;WebView&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    android:&lt;span class=&quot;property&quot;&gt;id&lt;/span&gt;=&lt;span class=&quot;string&quot;&gt;&quot;@+id/main_web_view&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    android:layout_width=&lt;span class=&quot;string&quot;&gt;&quot;match_parent&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    android:layout_height=&lt;span class=&quot;string&quot;&gt;&quot;match_parent&quot;&lt;/span&gt;/&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;使用loadUrl方法来加载WebView&lt;/p&gt;
+&lt;figure class=&quot;highlight applescript&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;WebView webView = (WebView) findViewById(R.&lt;span class=&quot;property&quot;&gt;id&lt;/span&gt;.main_web_view);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;webView.loadUrl(&lt;span class=&quot;string&quot;&gt;&quot;http://www.example.com&quot;&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;在此之前，还要确保应用有Internet权限&lt;/p&gt;
+&lt;figure class=&quot;highlight applescript&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&amp;lt;uses-permission android:&lt;span class=&quot;property&quot;&gt;name&lt;/span&gt;=&lt;span class=&quot;string&quot;&gt;&quot;android.permission.INTERNET&quot;&lt;/span&gt; /&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;至此，一个基本的WebView页就完成了。&lt;/p&gt;
+&lt;h2 id=&quot;在WebView中使用JavaScript&quot;&gt;在WebView中使用JavaScript&lt;/h2&gt;&lt;p&gt;默认情况下，WebView是禁用JavaScript的。通过如下代码来为WebView开启JavaScript支持&lt;/p&gt;
+&lt;figure class=&quot;highlight dns&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;WebSettings webSettings = webView.getSettings()&lt;span class=&quot;comment&quot;&gt;;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;webSettings.setJavaScriptEnabled(true)&lt;span class=&quot;comment&quot;&gt;;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;WebSettings管理着很多很有用的WebView设置项，例如setUserAgentString()等。具体细节可戳  &lt;a href=&quot;http://androiddoc.qiniudn.com/reference/android/webkit/WebSettings.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;WebSettings Doc&lt;/a&gt;.&lt;/p&gt;
+&lt;h3 id=&quot;WebView与JavaScript的交互*&quot;&gt;WebView与JavaScript的交互*&lt;/h3&gt;&lt;p&gt;WebView属Android端，所以该交互问题就是Android本地与JS端的交互问题。为了便于梳理，写了如图所示的一个Demo，上半部分白底为WebView，加载本地的一个html页面，内含一个button和一个h1；下半部分是Android上的一个Button。 &lt;a href=&quot;https://github.com/ponywei/WebViewJSDemo&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Demo code&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://7u2h4k.com1.z0.glb.clouddn.com/2016-03-31%2017.55.55.png&quot; alt=&quot;屏幕截图&quot;&gt;&lt;/p&gt;
+&lt;h3 id=&quot;WebView调用JavaScript的方法&quot;&gt;WebView调用JavaScript的方法&lt;/h3&gt;&lt;p&gt;WebView调用JavaScript的方法相对比较简单，如果是无参数方法：&lt;/p&gt;
+&lt;figure class=&quot;highlight stylus&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;webView.&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;title&quot;&gt;loadUrl&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;(&lt;span class=&quot;string&quot;&gt;&quot;javascript:METHOD&quot;&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;其中 METHOD 为javascript方法名；&lt;br&gt;如果方法需要入参，例如下面这个javascript方法：&lt;/p&gt;
+&lt;figure class=&quot;highlight actionscript&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;testMethod&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;(name)&lt;/span&gt; &lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    ...&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;由于javascript为弱类型语言，所以入参并没有指定任何类型；具体类型的处理一般在javascript方法体内。&lt;br&gt;在webView中调用方法（注意，如果是字符串类型，必须在用单引号包裹，否则javascript无法识别，会提示name为定义）：&lt;/p&gt;
+&lt;figure class=&quot;highlight applescript&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;String &lt;span class=&quot;property&quot;&gt;name&lt;/span&gt; = &lt;span class=&quot;string&quot;&gt;&quot;Android&quot;&lt;/span&gt;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;webView.loadUrl(&lt;span class=&quot;string&quot;&gt;&quot;javascript:testMethod(&#39;&quot;&lt;/span&gt; + &lt;span class=&quot;property&quot;&gt;name&lt;/span&gt; + &lt;span class=&quot;string&quot;&gt;&quot;&#39;)&quot;&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h3 id=&quot;JavaScript调用Android端的Java方法&quot;&gt;JavaScript调用Android端的Java方法&lt;/h3&gt;&lt;h4 id=&quot;1-创建接口&quot;&gt;1.创建接口&lt;/h4&gt;&lt;p&gt;想要在 JavaScript 中调用相关的 Java 方法，需要在JavaScript端与Android客户端之间建立一个接口。&lt;/p&gt;
+&lt;p&gt;如下名为WebAppInterface的类，该类提供了一个名为showToast的本地方法，调用Android Toast通知消息，需要入参；该方法为等待JavaScript调用的方法，必须指定为 public 。&lt;/p&gt;
+&lt;p&gt;注意：如果 targetSdkVersion &amp;gt;= 17 ;必须要在为JS设置的方法加上 &lt;strong&gt; @JavascriptInterface &lt;/strong&gt; 的注解；如果没有该注解，那么该方法在Android 4.2及以上的系统中是无法被JS访问到的。&lt;/p&gt;
+&lt;figure class=&quot;highlight cs&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;WebAppInterface&lt;/span&gt; &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;		Context mContext;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;		&lt;span class=&quot;comment&quot;&gt;/** Instantiate the interface and set the context */&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;		WebAppInterface(Context c) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;			mContext = c;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;		&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;		&lt;span class=&quot;comment&quot;&gt;/** Show a toast from the web page */&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;		@&lt;span class=&quot;function&quot;&gt;JavascriptInterface&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;		&lt;span class=&quot;keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;showToast&lt;/span&gt;(&lt;span class=&quot;params&quot;&gt;String toast&lt;/span&gt;) &lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;			Toast.makeText(mContext, &lt;span class=&quot;string&quot;&gt;&quot;Hello,&quot;&lt;/span&gt; + toast, Toast.LENGTH_SHORT).show();&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;		&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h4 id=&quot;2-绑定接口&quot;&gt;2.绑定接口&lt;/h4&gt;&lt;p&gt;将该接口绑定到javascript，并指定一个名字，用于在javascript中调用。&lt;/p&gt;
+&lt;figure class=&quot;highlight actionscript&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;webView.addJavascriptInterface(&lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; WebAppInterface(&lt;span class=&quot;keyword&quot;&gt;this&lt;/span&gt;), &lt;span class=&quot;string&quot;&gt;&quot;Android&quot;&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;这样就为运行在WebView中的JavaScript创建了一个名为Android的接口，&lt;/p&gt;
+&lt;h4 id=&quot;3-调用&quot;&gt;3.调用&lt;/h4&gt;&lt;p&gt;在javascript中的调用方法如下代码所示，id为btnCallNative的button在点击时后调用名为showAndroidToast的JS方法，并传入参数字符串；showAndroidToast方法体中通过名为Android的接口调用Android端的showToast方法，同时传入参数（注意： &lt;strong&gt; 没有必要 &lt;/strong&gt; 再在javascript中对 “Android”  进行初始化，步骤2中webView已自动完成此工作）：&lt;/p&gt;
+&lt;figure class=&quot;highlight xml&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;   &lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;title&quot;&gt;script&lt;/span&gt; &lt;span class=&quot;attribute&quot;&gt;type&lt;/span&gt;=&lt;span class=&quot;value&quot;&gt;&quot;text/javascript&quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;actionscript&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;       &lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;showAndroidToast&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;(toast)&lt;/span&gt;&lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;           Android.showToast(toast);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;       &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   &lt;/span&gt;&lt;span class=&quot;tag&quot;&gt;&amp;lt;/&lt;span class=&quot;title&quot;&gt;script&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;title&quot;&gt;button&lt;/span&gt; &lt;span class=&quot;attribute&quot;&gt;id&lt;/span&gt;=&lt;span class=&quot;value&quot;&gt;&quot;btnCallNative&quot;&lt;/span&gt; &lt;span class=&quot;attribute&quot;&gt;onclick&lt;/span&gt; = &quot;&lt;span class=&quot;attribute&quot;&gt;showAndroidToast&lt;/span&gt;(&#39;&lt;span class=&quot;attribute&quot;&gt;javascript&lt;/span&gt;&#39;)&quot;&amp;gt;&lt;/span&gt;JS call Native&lt;span class=&quot;tag&quot;&gt;&amp;lt;/&lt;span class=&quot;title&quot;&gt;button&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h2 id=&quot;WebView页面导航处理&quot;&gt;WebView页面导航处理&lt;/h2&gt;&lt;p&gt;当你在WebView中点击其他链接时，系统默认会去启动一个默认浏览器（或弹出选择）去处理这个URL请求。大多数情况下这都不符合需求场景，我们可以通过创建自定义的 &lt;strong&gt; WebViewClient &lt;/strong&gt; 来修改这个规则，让用户的前进或者后退操作都在这个WebView内进行，或者打开其他程序来处理。&lt;/p&gt;
+&lt;figure class=&quot;highlight scala&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;class&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;MyWebViewClient&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;extends&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;WebViewClient&lt;/span&gt; &amp;#123;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;annotation&quot;&gt;@Override&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    public boolean shouldOverrideUrlLoading(&lt;span class=&quot;type&quot;&gt;WebView&lt;/span&gt; view, &lt;span class=&quot;type&quot;&gt;String&lt;/span&gt; url) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; (&lt;span class=&quot;type&quot;&gt;Uri&lt;/span&gt;.parse(url).getHost().equals(&lt;span class=&quot;string&quot;&gt;&quot;www.example.com&quot;&lt;/span&gt;)) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            &lt;span class=&quot;comment&quot;&gt;// This is my web site, so do not override; let my WebView load the page&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;literal&quot;&gt;false&lt;/span&gt;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;comment&quot;&gt;// Otherwise, the link is not for a page on my site, so launch another Activity that handles URLs&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;type&quot;&gt;Intent&lt;/span&gt; intent = &lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;type&quot;&gt;Intent&lt;/span&gt;(&lt;span class=&quot;type&quot;&gt;Intent&lt;/span&gt;.&lt;span class=&quot;type&quot;&gt;ACTION_VIEW&lt;/span&gt;, &lt;span class=&quot;type&quot;&gt;Uri&lt;/span&gt;.parse(url));&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        startActivity(intent);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;literal&quot;&gt;true&lt;/span&gt;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;以上代码定义了一个名为MyWebViewClient的类，继承字WebViewClient，通过重写shouldOverrideUrlLoading方法来进行url路由操作；为了数据安全，建议在app的WebView中只加载该app自有的主机链接；对于其他不能确定安全性的链接在交给系统中其他程序处理。&lt;/p&gt;
+&lt;p&gt;然后为WebView初始化一个WebViewClient实例：&lt;/p&gt;
+&lt;figure class=&quot;highlight actionscript&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;webView.setWebViewClient(&lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; MyWebViewClient());&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h2 id=&quot;WebView历史导航&quot;&gt;WebView历史导航&lt;/h2&gt;&lt;p&gt;如果WebView重新加载了其他的URL，那么它会自动累加保存一个页面历史记录。可以通过 goBack() 和 goForward() 方法来进行历史导航。&lt;br&gt;如下代码，在activity中重写onKeyDown方法来处理返回按键的逻辑，其中 canGoBack() 用来判断是否还有历史页面可以返回，类似的还有 canGoForward()。如果用户按下返回键且存在可返回的历史页面，WebView回退到上一个历史页面。&lt;/p&gt;
+&lt;figure class=&quot;highlight aspectj&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;annotation&quot;&gt;@Override&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;onKeyDown&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;(&lt;span class=&quot;keyword&quot;&gt;int&lt;/span&gt; keyCode, KeyEvent event)&lt;/span&gt; &lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;comment&quot;&gt;// Check if the key event was the Back button and if there&#39;s history&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; ((keyCode == KeyEvent.KEYCODE_BACK) &amp;amp;&amp;amp; myWebView.canGoBack()) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        myWebView.goBack();&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;true&lt;/span&gt;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;comment&quot;&gt;// If it wasn&#39;t the Back key or there&#39;s no web page history, bubble up to the default&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;comment&quot;&gt;// system behavior (probably exit the activity)&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;super&lt;/span&gt;.&lt;span class=&quot;title&quot;&gt;onKeyDown&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;(keyCode, event)&lt;/span&gt;&lt;/span&gt;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;在Android项目开发中，WebView的使用都是必不可少的。在一个基本功能完备的项目中，都会把WebView提取成一个公用的Activity组件，在需要跳转到H5页面的地方启动这个activity并传入相关参数即可。这样的简便快捷的使用，却容易造成开发者对WebView相关知识的疏忽。遂成此文，整理一二。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Blog" scheme="http://hellopony.cn/categories/Blog/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Android Debug Bridge(adb) 以及 WIFI调试</title>
+    <link href="http://hellopony.cn/2016/04/01/Android_Debug_Bridge/"/>
+    <id>http://hellopony.cn/2016/04/01/Android_Debug_Bridge/</id>
+    <published>2016-04-01T03:52:58.000Z</published>
+    <updated>2016-04-01T03:52:58.000Z</updated>
+    
+    <content type="html">&lt;p&gt;Android Debug Bridge (ADB) 是一个非常有用的命令行工具，可以通过它与模拟器或者已连接的设备进行通信。&lt;/p&gt;
+&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+&lt;p&gt;本质上它是一个 &lt;strong&gt;Client-Server&lt;/strong&gt; 程序，包含三个部分：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Client&lt;/strong&gt;，客户端程序，运行在开发环境，可以通过任意的命令行工具执行adb命令来操作Client。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Server&lt;/strong&gt;，服务端程序没，运行在开发环境的一个后台进程，它负责管理Client和模拟器或真机设备上的adb守护进程之间的通信。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Daemon&lt;/strong&gt;，守护进程，运行在模拟器或Android真机设备的后台。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;ADB工具位于 {sdk}/platform-tools/&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;打开一个adb Client之后，客户端程序会首先检查adb服务端进程是否正在运行。如果没有，先启动之。服务端程序启动之后会绑定到本地端口5037，监听Client发出的命令（所有的adb Client与Server的通信均通过5037端口进行）。然后 Server会与所有的模拟器或真机建立连接，之后就可以通过adb命令来控制所有的实例了。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;在使用adb之前，确保模拟器或真机已开启 “USB调试（USB debugging）”&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&quot;语法&quot;&gt;语法&lt;/h2&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;adb [&lt;span class=&quot;operator&quot;&gt;-d&lt;/span&gt;|&lt;span class=&quot;operator&quot;&gt;-e&lt;/span&gt;|&lt;span class=&quot;operator&quot;&gt;-s&lt;/span&gt; &amp;lt;serialNumber&amp;gt;] &amp;lt;&lt;span class=&quot;built_in&quot;&gt;command&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;如果仅有一个模拟器或真机设备连接，adb 命令会默认发送到这个设备。如果有多个，就需要通过 “-d|-e|-s &lt;serialnumber&gt;”参数来限定命令的目标设备。&lt;/serialnumber&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;-d ：直接发送到通过USB连接的设备&lt;/li&gt;
+&lt;li&gt;-e ：直接发送到模拟器&lt;/li&gt;
+&lt;li&gt;-s [serialNumber] ：发送到指定序列号的设备&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;常用命令&quot;&gt;常用命令&lt;/h2&gt;&lt;h3 id=&quot;查看连接设备&quot;&gt;查看连接设备&lt;/h3&gt;&lt;p&gt;输出格式：[serialNumber] [state]&lt;/p&gt;
+&lt;figure class=&quot;highlight capnproto&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;$ adb devices&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;List&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;of&lt;/span&gt; devices attached&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;emulator-&lt;span class=&quot;number&quot;&gt;5554&lt;/span&gt;  device&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;number&quot;&gt;953756558&lt;/span&gt;  device&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h3 id=&quot;安装app&quot;&gt;安装app&lt;/h3&gt;&lt;p&gt;如果有多台设备连接，需要参数 “-d|-e|-s &lt;serialnumber&gt;”&lt;/serialnumber&gt;&lt;/p&gt;
+&lt;figure class=&quot;highlight xml&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;$ adb install &lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;title&quot;&gt;path_to_apk&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h3 id=&quot;卸载app&quot;&gt;卸载app&lt;/h3&gt;&lt;figure class=&quot;highlight xml&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;adb unstall &lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;title&quot;&gt;package_name&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h3 id=&quot;清除应用数据&quot;&gt;清除应用数据&lt;/h3&gt;&lt;figure class=&quot;highlight livecodeserver&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;adb &lt;span class=&quot;built_in&quot;&gt;shell&lt;/span&gt; pm &lt;span class=&quot;built_in&quot;&gt;clear&lt;/span&gt; &amp;lt;package_name&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h3 id=&quot;导出文件&quot;&gt;导出文件&lt;/h3&gt;&lt;figure class=&quot;highlight xml&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;adb pull &lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;title&quot;&gt;remote&lt;/span&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;title&quot;&gt;local&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h3 id=&quot;导入文件&quot;&gt;导入文件&lt;/h3&gt;&lt;figure class=&quot;highlight xml&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;adb push &lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;title&quot;&gt;local&lt;/span&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;title&quot;&gt;remote&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h3 id=&quot;查看栈顶Activity&quot;&gt;查看栈顶Activity&lt;/h3&gt;&lt;figure class=&quot;highlight livecodeserver&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;adb &lt;span class=&quot;built_in&quot;&gt;shell&lt;/span&gt; dumpsys activity top&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h3 id=&quot;查看所有安装应用的包名&quot;&gt;查看所有安装应用的包名&lt;/h3&gt;&lt;figure class=&quot;highlight stata&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;adb &lt;span class=&quot;keyword&quot;&gt;shell&lt;/span&gt; pm &lt;span class=&quot;keyword&quot;&gt;list&lt;/span&gt; packages -&lt;span class=&quot;literal&quot;&gt;f&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h3 id=&quot;查看Activity_Manager_State&quot;&gt;查看Activity Manager State&lt;/h3&gt;&lt;figure class=&quot;highlight livecodeserver&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;adb &lt;span class=&quot;built_in&quot;&gt;shell&lt;/span&gt; dumpsys activity&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h3 id=&quot;关闭服务端&quot;&gt;关闭服务端&lt;/h3&gt;&lt;figure class=&quot;highlight sql&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;adb &lt;span class=&quot;operator&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;kill&lt;/span&gt;-&lt;span class=&quot;keyword&quot;&gt;server&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h2 id=&quot;ADB的无线调试&quot;&gt;ADB的无线调试&lt;/h2&gt;&lt;h3 id=&quot;通过WIFI连接设备进行调试：&quot;&gt;通过WIFI连接设备进行调试：&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;确保Android设备和开发电脑在同一个WIFI网络内&lt;/li&gt;
+&lt;li&gt;通过USB将Android设备连接到电脑&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;设置目标设备监听TCP/IP的5555端口&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ adb tcpip &lt;span class=&quot;number&quot;&gt;5555&lt;/span&gt;        
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;断开USB连接&lt;/li&gt;
+&lt;li&gt;查询Android设备的IP地址&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;根据IP地址连接目标设备&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ adb connnet &amp;lt;device-&lt;span class=&quot;literal&quot;&gt;ip&lt;/span&gt;-&lt;span class=&quot;keyword&quot;&gt;address&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;确认目标设备的连接情况&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ adb device
+&lt;span class=&quot;label&quot;&gt;List&lt;/span&gt; of devices attached
+&amp;lt;device-&lt;span class=&quot;literal&quot;&gt;ip&lt;/span&gt;-&lt;span class=&quot;keyword&quot;&gt;address&amp;gt;:5555 &lt;/span&gt; device
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;连接完成。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&quot;如果adb连接被断开了：&quot;&gt;如果adb连接被断开了：&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;确保电脑和Android设备还处在同一WIFI网络内&lt;/li&gt;
+&lt;li&gt;从 &lt;strong&gt;步骤6&lt;/strong&gt; 开始进行重连，执行 adb connnet&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;如果无效，关闭 adb server&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;adb &lt;span class=&quot;operator&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;kill&lt;/span&gt;-&lt;span class=&quot;keyword&quot;&gt;server&lt;/span&gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;然后 &lt;strong&gt;重新执行连接&lt;/strong&gt; 操作。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&quot;参考资料&quot;&gt;参考资料&lt;/h3&gt;&lt;p&gt;&lt;a href=&quot;https://developer.android.com/intl/zh-cn/tools/help/adb.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;官方文档&lt;/a&gt;&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Android Debug Bridge (ADB) 是一个非常有用的命令行工具，可以通过它与模拟器或者已连接的设备进行通信。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Blog" scheme="http://hellopony.cn/categories/Blog/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Genymotion模拟器错误的解决</title>
+    <link href="http://hellopony.cn/2016/04/01/genymotion-arm-translation/"/>
+    <id>http://hellopony.cn/2016/04/01/genymotion-arm-translation/</id>
+    <published>2016-04-01T03:50:49.000Z</published>
+    <updated>2016-04-01T03:50:49.000Z</updated>
+    
+    <content type="html">&lt;p&gt;Android模拟器界Genymotion久负盛名，由于以前开发过程中都是真机调试，装的Genymotion也就是体验一下，并没有真正用来开发。这两天Mac的USB接口告急，决定开发调试转Genymotion来进行。但是就在安装的时候就遇到了错误”[INSTALL_FAILED_NO_MATCHING_ABIS]”导致app无法install，一番折腾之后总算是通过了，总结一下。&lt;/p&gt;
+&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+&lt;h2 id=&quot;起因&quot;&gt;起因&lt;/h2&gt;&lt;h3 id=&quot;错误代码：[INSTALL_FAILED_NO_MATCHING_ABIS]&quot;&gt;错误代码：[INSTALL_FAILED_NO_MATCHING_ABIS]&lt;/h3&gt;&lt;p&gt;一番搜索之后，定位到了错误原因：项目中”armeabi/“和”armeabi-v7a/“中引用到了一些.so库，但是Genymotion的System Image是基于Intel x86架构，往一个x86架构的系统中安装含有基于arm架构本地库的APP是注定要失败的。网上已经有了一些很不错的讨论：&lt;a href=&quot;http://stackoverflow.com/questions/7080525/why-use-armeabi-v7a-code-over-armeabi-code&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;StackOverflow&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;解决方案&quot;&gt;解决方案&lt;/h2&gt;&lt;p&gt;在模拟器系统中安装Translation库。&lt;/p&gt;
+&lt;h3 id=&quot;4-x&quot;&gt;4.x&lt;/h3&gt;&lt;p&gt;模拟器系统为4.x的解决方案可以参考这篇博客：&lt;a href=&quot;http://blog.csdn.net/wjr2012/article/details/16359113&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;4.x方案&lt;/a&gt;&lt;br&gt;PS：此博客更新中说可以解决在5.1上的问题，但结合评论的反馈，以及我的实测，此方案在5.x（5.0，5.1）上无效。&lt;/p&gt;
+&lt;h3 id=&quot;5-x&quot;&gt;5.x&lt;/h3&gt;&lt;p&gt;以上方案在5.x上并没有效果，所以又一番墙外搜索，找到了这篇博客：&lt;a href=&quot;http://23pin.logdown.com/posts/294446-genymotion-use-arm-translation-on-5x-image&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Use ARM Translation on 5.x image&lt;/a&gt;，Problem Solved！看作者的文风，应该是港澳台同胞（膜拜大神ing），可以直接去看原文，或者直接看下面的解决步骤：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Genymotion中新建5.0或5.1的模拟器&lt;/li&gt;
+&lt;li&gt;把&lt;a href=&quot;https://mega.nz/#!Iw1HRLxR!8zVOQ84uk2hpxgsRrsHfp-wsbKOUvupHLJyWqWzPiUg&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;ARM_Translation_Lollipop.zip&lt;/a&gt;拖进模拟器窗口，OK，自动安装&lt;/li&gt;
+&lt;li&gt;安装完成先不要着急关闭/重启模拟器（不同于4.x），执行命令：&lt;code&gt;adb shell /system/etc/houdini_patcher.sh&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;完成后重启模拟器&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&quot;后记&quot;&gt;后记&lt;/h3&gt;&lt;p&gt;以上两种方案应该能解决绝大部分人的问题了，再次感谢两位博客原作者。顺带安利一下，Genymotion确实是“目前”东西半球加起来最顺滑的模拟器啊没有之一。不过 Android Studio 2.0 已经发布到Preview 4了，最最最重要的是，全新的模拟器很逆天，据说Google自己说很好用，速度提升50倍!!!详细信息看这里：&lt;a href=&quot;http://android-developers.blogspot.jp/2015/11/android-studio-20-preview.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Android Studio 2.0 Preview&lt;/a&gt;。不过因为是工作环境，还没敢升级到Preview去尝试，十分期待稳定版!&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Android模拟器界Genymotion久负盛名，由于以前开发过程中都是真机调试，装的Genymotion也就是体验一下，并没有真正用来开发。这两天Mac的USB接口告急，决定开发调试转Genymotion来进行。但是就在安装的时候就遇到了错误”[INSTALL_FAILED_NO_MATCHING_ABIS]”导致app无法install，一番折腾之后总算是通过了，总结一下。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Blog" scheme="http://hellopony.cn/categories/Blog/"/>
+    
+    
+  </entry>
+  
+</feed>

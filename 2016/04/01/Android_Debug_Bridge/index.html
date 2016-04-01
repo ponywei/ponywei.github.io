@@ -1,0 +1,58 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> Android Debug Bridge(adb) 以及 WIFI调试 · HelloPony</title><meta name="description" content="Android Debug Bridge(adb) 以及 WIFI调试 - PONY WEI"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="short icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600" type="text/css"></head><body><header><a href="/" class="logo-link"><img src="/favicon.png"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="https://github.com/ponywei" target="_blank" class="nav-list-link">GITHUB</a></li></ul></header><section class="container"><div class="post"><article class="post-block"><h1 class="post-title">Android Debug Bridge(adb) 以及 WIFI调试</h1><div class="post-time">2016年4月1日</div><div class="post-content"><p>Android Debug Bridge (ADB) 是一个非常有用的命令行工具，可以通过它与模拟器或者已连接的设备进行通信。</p>
+<a id="more"></a>
+<p>本质上它是一个 <strong>Client-Server</strong> 程序，包含三个部分：</p>
+<ol>
+<li><strong>Client</strong>，客户端程序，运行在开发环境，可以通过任意的命令行工具执行adb命令来操作Client。</li>
+<li><strong>Server</strong>，服务端程序没，运行在开发环境的一个后台进程，它负责管理Client和模拟器或真机设备上的adb守护进程之间的通信。</li>
+<li><strong>Daemon</strong>，守护进程，运行在模拟器或Android真机设备的后台。</li>
+</ol>
+<p><strong>ADB工具位于 {sdk}/platform-tools/</strong></p>
+<p>打开一个adb Client之后，客户端程序会首先检查adb服务端进程是否正在运行。如果没有，先启动之。服务端程序启动之后会绑定到本地端口5037，监听Client发出的命令（所有的adb Client与Server的通信均通过5037端口进行）。然后 Server会与所有的模拟器或真机建立连接，之后就可以通过adb命令来控制所有的实例了。</p>
+<p><strong>在使用adb之前，确保模拟器或真机已开启 “USB调试（USB debugging）”</strong></p>
+<h2 id="语法">语法</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb [<span class="operator">-d</span>|<span class="operator">-e</span>|<span class="operator">-s</span> &lt;serialNumber&gt;] &lt;<span class="built_in">command</span>&gt;</span><br></pre></td></tr></table></figure>
+<p>如果仅有一个模拟器或真机设备连接，adb 命令会默认发送到这个设备。如果有多个，就需要通过 “-d|-e|-s <serialnumber>”参数来限定命令的目标设备。</serialnumber></p>
+<ol>
+<li>-d ：直接发送到通过USB连接的设备</li>
+<li>-e ：直接发送到模拟器</li>
+<li>-s [serialNumber] ：发送到指定序列号的设备</li>
+</ol>
+<h2 id="常用命令">常用命令</h2><h3 id="查看连接设备">查看连接设备</h3><p>输出格式：[serialNumber] [state]</p>
+<figure class="highlight capnproto"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ adb devices</span><br><span class="line"><span class="built_in">List</span> <span class="keyword">of</span> devices attached</span><br><span class="line">emulator-<span class="number">5554</span>  device</span><br><span class="line"><span class="number">953756558</span>  device</span><br></pre></td></tr></table></figure>
+<h3 id="安装app">安装app</h3><p>如果有多台设备连接，需要参数 “-d|-e|-s <serialnumber>”</serialnumber></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ adb install <span class="tag">&lt;<span class="title">path_to_apk</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="卸载app">卸载app</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb unstall <span class="tag">&lt;<span class="title">package_name</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="清除应用数据">清除应用数据</h3><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb <span class="built_in">shell</span> pm <span class="built_in">clear</span> &lt;package_name&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="导出文件">导出文件</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb pull <span class="tag">&lt;<span class="title">remote</span>&gt;</span> <span class="tag">&lt;<span class="title">local</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="导入文件">导入文件</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb push <span class="tag">&lt;<span class="title">local</span>&gt;</span> <span class="tag">&lt;<span class="title">remote</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="查看栈顶Activity">查看栈顶Activity</h3><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb <span class="built_in">shell</span> dumpsys activity top</span><br></pre></td></tr></table></figure>
+<h3 id="查看所有安装应用的包名">查看所有安装应用的包名</h3><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb <span class="keyword">shell</span> pm <span class="keyword">list</span> packages -<span class="literal">f</span></span><br></pre></td></tr></table></figure>
+<h3 id="查看Activity_Manager_State">查看Activity Manager State</h3><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb <span class="built_in">shell</span> dumpsys activity</span><br></pre></td></tr></table></figure>
+<h3 id="关闭服务端">关闭服务端</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb <span class="operator"><span class="keyword">kill</span>-<span class="keyword">server</span></span></span><br></pre></td></tr></table></figure>
+<h2 id="ADB的无线调试">ADB的无线调试</h2><h3 id="通过WIFI连接设备进行调试：">通过WIFI连接设备进行调试：</h3><ol>
+<li>确保Android设备和开发电脑在同一个WIFI网络内</li>
+<li>通过USB将Android设备连接到电脑</li>
+<li><p>设置目标设备监听TCP/IP的5555端口</p>
+<pre><code>$ adb tcpip <span class="number">5555</span>        
+</code></pre></li>
+<li>断开USB连接</li>
+<li>查询Android设备的IP地址</li>
+<li><p>根据IP地址连接目标设备</p>
+<pre><code>$ adb connnet &lt;device-<span class="literal">ip</span>-<span class="keyword">address&gt;</span>
+</code></pre></li>
+<li><p>确认目标设备的连接情况</p>
+<pre><code>$ adb device
+<span class="label">List</span> of devices attached
+&lt;device-<span class="literal">ip</span>-<span class="keyword">address&gt;:5555 </span> device
+</code></pre><p>连接完成。</p>
+</li>
+</ol>
+<h3 id="如果adb连接被断开了：">如果adb连接被断开了：</h3><ol>
+<li>确保电脑和Android设备还处在同一WIFI网络内</li>
+<li>从 <strong>步骤6</strong> 开始进行重连，执行 adb connnet</li>
+<li><p>如果无效，关闭 adb server</p>
+<pre><code>adb <span class="operator"><span class="keyword">kill</span>-<span class="keyword">server</span></span>
+</code></pre><p>然后 <strong>重新执行连接</strong> 操作。</p>
+</li>
+</ol>
+<h3 id="参考资料">参考资料</h3><p><a href="https://developer.android.com/intl/zh-cn/tools/help/adb.html" target="_blank" rel="external">官方文档</a></p>
+</div></article></div></section><footer><div class="paginator"><a href="/2016/04/01/Android WebView相关姿势/" class="prev">上一篇</a><a href="/2016/04/01/genymotion-arm-translation/" class="next">下一篇</a></div><div class="copyright"><p>© 2015 - 2016 <a href="http://hellopony.cn">PONY WEI</a>, unless otherwise noted.</p></div></footer><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-65933410-1",'auto');ga('send','pageview');</script><script>var _hmt = _hmt || [];(function() {var hm = document.createElement("script");hm.src = "//hm.baidu.com/hm.js?a36e15d9e2adec9a21fcdd9f686b1ed2";var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s);})();</script><script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script></body></html>
