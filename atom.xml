@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://hellopony.cn/"/>
-  <updated>2016-04-05T10:07:25.000Z</updated>
+  <updated>2016-04-05T10:10:25.000Z</updated>
   <id>http://hellopony.cn/</id>
   
   <author>
@@ -16,11 +16,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>[object Object]</title>
+    <title>Retrofit Doc 译</title>
     <link href="http://hellopony.cn/2016/04/05/Retrofit%20Doc%20%E8%AF%91/"/>
     <id>http://hellopony.cn/2016/04/05/Retrofit Doc 译/</id>
-    <published>2016-04-05T10:07:25.000Z</published>
-    <updated>2016-04-05T10:07:25.000Z</updated>
+    <published>2016-04-04T16:00:00.000Z</published>
+    <updated>2016-04-05T10:10:25.000Z</updated>
     
     <content type="html">&lt;p&gt;为加深对Retrofit网络请求框架的理解，遂将官网Doc通读一遍并翻译成中文。&lt;/p&gt;
 &lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
@@ -85,6 +85,39 @@
       &lt;p&gt;为加深对Retrofit网络请求框架的理解，遂将官网Doc通读一遍并翻译成中文。&lt;/p&gt;
     
     </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Genymotion模拟器错误的解决</title>
+    <link href="http://hellopony.cn/2016/04/01/genymotion-arm-translation/"/>
+    <id>http://hellopony.cn/2016/04/01/genymotion-arm-translation/</id>
+    <published>2016-04-01T06:32:32.000Z</published>
+    <updated>2016-04-01T06:32:32.000Z</updated>
+    
+    <content type="html">&lt;p&gt;Android模拟器界Genymotion久负盛名，由于以前开发过程中都是真机调试，装的Genymotion也就是体验一下，并没有真正用来开发。这两天Mac的USB接口告急，决定开发调试转Genymotion来进行。但是就在安装的时候就遇到了错误”[INSTALL_FAILED_NO_MATCHING_ABIS]”导致app无法install，一番折腾之后总算是通过了，总结一下。&lt;/p&gt;
+&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+&lt;h2 id=&quot;起因&quot;&gt;起因&lt;/h2&gt;&lt;h3 id=&quot;错误代码：[INSTALL_FAILED_NO_MATCHING_ABIS]&quot;&gt;错误代码：[INSTALL_FAILED_NO_MATCHING_ABIS]&lt;/h3&gt;&lt;p&gt;一番搜索之后，定位到了错误原因：项目中”armeabi/“和”armeabi-v7a/“中引用到了一些.so库，但是Genymotion的System Image是基于Intel x86架构，往一个x86架构的系统中安装含有基于arm架构本地库的APP是注定要失败的。网上已经有了一些很不错的讨论：&lt;a href=&quot;http://stackoverflow.com/questions/7080525/why-use-armeabi-v7a-code-over-armeabi-code&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;StackOverflow&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;解决方案&quot;&gt;解决方案&lt;/h2&gt;&lt;p&gt;在模拟器系统中安装Translation库。&lt;/p&gt;
+&lt;h3 id=&quot;4-x&quot;&gt;4.x&lt;/h3&gt;&lt;p&gt;模拟器系统为4.x的解决方案可以参考这篇博客：&lt;a href=&quot;http://blog.csdn.net/wjr2012/article/details/16359113&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;4.x方案&lt;/a&gt;&lt;br&gt;PS：此博客更新中说可以解决在5.1上的问题，但结合评论的反馈，以及我的实测，此方案在5.x（5.0，5.1）上无效。&lt;/p&gt;
+&lt;h3 id=&quot;5-x&quot;&gt;5.x&lt;/h3&gt;&lt;p&gt;以上方案在5.x上并没有效果，所以又一番墙外搜索，找到了这篇博客：&lt;a href=&quot;http://23pin.logdown.com/posts/294446-genymotion-use-arm-translation-on-5x-image&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Use ARM Translation on 5.x image&lt;/a&gt;，Problem Solved！看作者的文风，应该是港澳台同胞（膜拜大神ing），可以直接去看原文，或者直接看下面的解决步骤：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Genymotion中新建5.0或5.1的模拟器&lt;/li&gt;
+&lt;li&gt;把&lt;a href=&quot;https://mega.nz/#!Iw1HRLxR!8zVOQ84uk2hpxgsRrsHfp-wsbKOUvupHLJyWqWzPiUg&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;ARM_Translation_Lollipop.zip&lt;/a&gt;拖进模拟器窗口，OK，自动安装&lt;/li&gt;
+&lt;li&gt;安装完成先不要着急关闭/重启模拟器（不同于4.x），执行命令：&lt;code&gt;adb shell /system/etc/houdini_patcher.sh&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;完成后重启模拟器&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&quot;后记&quot;&gt;后记&lt;/h3&gt;&lt;p&gt;以上两种方案应该能解决绝大部分人的问题了，再次感谢两位博客原作者。顺带安利一下，Genymotion确实是“目前”东西半球加起来最顺滑的模拟器啊没有之一。不过 Android Studio 2.0 已经发布到Preview 4了，最最最重要的是，全新的模拟器很逆天，据说Google自己说很好用，速度提升50倍!!!详细信息看这里：&lt;a href=&quot;http://android-developers.blogspot.jp/2015/11/android-studio-20-preview.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Android Studio 2.0 Preview&lt;/a&gt;。不过因为是工作环境，还没敢升级到Preview去尝试，十分期待稳定版!&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Android模拟器界Genymotion久负盛名，由于以前开发过程中都是真机调试，装的Genymotion也就是体验一下，并没有真正用来开发。这两天Mac的USB接口告急，决定开发调试转Genymotion来进行。但是就在安装的时候就遇到了错误”[INSTALL_FAILED_NO_MATCHING_ABIS]”导致app无法install，一番折腾之后总算是通过了，总结一下。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Blog" scheme="http://hellopony.cn/categories/Blog/"/>
     
     
   </entry>
@@ -218,39 +251,6 @@
     <summary type="html">
     
       &lt;p&gt;Android Debug Bridge (ADB) 是一个非常有用的命令行工具，可以通过它与模拟器或者已连接的设备进行通信。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="Blog" scheme="http://hellopony.cn/categories/Blog/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Genymotion模拟器错误的解决</title>
-    <link href="http://hellopony.cn/2016/04/01/genymotion-arm-translation/"/>
-    <id>http://hellopony.cn/2016/04/01/genymotion-arm-translation/</id>
-    <published>2016-04-01T03:50:49.000Z</published>
-    <updated>2016-04-01T03:50:49.000Z</updated>
-    
-    <content type="html">&lt;p&gt;Android模拟器界Genymotion久负盛名，由于以前开发过程中都是真机调试，装的Genymotion也就是体验一下，并没有真正用来开发。这两天Mac的USB接口告急，决定开发调试转Genymotion来进行。但是就在安装的时候就遇到了错误”[INSTALL_FAILED_NO_MATCHING_ABIS]”导致app无法install，一番折腾之后总算是通过了，总结一下。&lt;/p&gt;
-&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
-&lt;h2 id=&quot;起因&quot;&gt;起因&lt;/h2&gt;&lt;h3 id=&quot;错误代码：[INSTALL_FAILED_NO_MATCHING_ABIS]&quot;&gt;错误代码：[INSTALL_FAILED_NO_MATCHING_ABIS]&lt;/h3&gt;&lt;p&gt;一番搜索之后，定位到了错误原因：项目中”armeabi/“和”armeabi-v7a/“中引用到了一些.so库，但是Genymotion的System Image是基于Intel x86架构，往一个x86架构的系统中安装含有基于arm架构本地库的APP是注定要失败的。网上已经有了一些很不错的讨论：&lt;a href=&quot;http://stackoverflow.com/questions/7080525/why-use-armeabi-v7a-code-over-armeabi-code&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;StackOverflow&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&quot;解决方案&quot;&gt;解决方案&lt;/h2&gt;&lt;p&gt;在模拟器系统中安装Translation库。&lt;/p&gt;
-&lt;h3 id=&quot;4-x&quot;&gt;4.x&lt;/h3&gt;&lt;p&gt;模拟器系统为4.x的解决方案可以参考这篇博客：&lt;a href=&quot;http://blog.csdn.net/wjr2012/article/details/16359113&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;4.x方案&lt;/a&gt;&lt;br&gt;PS：此博客更新中说可以解决在5.1上的问题，但结合评论的反馈，以及我的实测，此方案在5.x（5.0，5.1）上无效。&lt;/p&gt;
-&lt;h3 id=&quot;5-x&quot;&gt;5.x&lt;/h3&gt;&lt;p&gt;以上方案在5.x上并没有效果，所以又一番墙外搜索，找到了这篇博客：&lt;a href=&quot;http://23pin.logdown.com/posts/294446-genymotion-use-arm-translation-on-5x-image&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Use ARM Translation on 5.x image&lt;/a&gt;，Problem Solved！看作者的文风，应该是港澳台同胞（膜拜大神ing），可以直接去看原文，或者直接看下面的解决步骤：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Genymotion中新建5.0或5.1的模拟器&lt;/li&gt;
-&lt;li&gt;把&lt;a href=&quot;https://mega.nz/#!Iw1HRLxR!8zVOQ84uk2hpxgsRrsHfp-wsbKOUvupHLJyWqWzPiUg&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;ARM_Translation_Lollipop.zip&lt;/a&gt;拖进模拟器窗口，OK，自动安装&lt;/li&gt;
-&lt;li&gt;安装完成先不要着急关闭/重启模拟器（不同于4.x），执行命令：&lt;code&gt;adb shell /system/etc/houdini_patcher.sh&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;完成后重启模拟器&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h3 id=&quot;后记&quot;&gt;后记&lt;/h3&gt;&lt;p&gt;以上两种方案应该能解决绝大部分人的问题了，再次感谢两位博客原作者。顺带安利一下，Genymotion确实是“目前”东西半球加起来最顺滑的模拟器啊没有之一。不过 Android Studio 2.0 已经发布到Preview 4了，最最最重要的是，全新的模拟器很逆天，据说Google自己说很好用，速度提升50倍!!!详细信息看这里：&lt;a href=&quot;http://android-developers.blogspot.jp/2015/11/android-studio-20-preview.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Android Studio 2.0 Preview&lt;/a&gt;。不过因为是工作环境，还没敢升级到Preview去尝试，十分期待稳定版!&lt;/p&gt;
-</content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;Android模拟器界Genymotion久负盛名，由于以前开发过程中都是真机调试，装的Genymotion也就是体验一下，并没有真正用来开发。这两天Mac的USB接口告急，决定开发调试转Genymotion来进行。但是就在安装的时候就遇到了错误”[INSTALL_FAILED_NO_MATCHING_ABIS]”导致app无法install，一番折腾之后总算是通过了，总结一下。&lt;/p&gt;
     
     </summary>
     
