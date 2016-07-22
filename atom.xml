@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://hellopony.cn/"/>
-  <updated>2016-04-05T10:10:25.000Z</updated>
+  <updated>2016-07-22T10:37:40.000Z</updated>
   <id>http://hellopony.cn/</id>
   
   <author>
@@ -14,6 +14,63 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>SpannableString.setSpan 非常规探索</title>
+    <link href="http://hellopony.cn/2016/07/22/SpannableString.setSpan%20%E9%9D%9E%E5%B8%B8%E8%A7%84%E6%8E%A2%E7%B4%A2/"/>
+    <id>http://hellopony.cn/2016/07/22/SpannableString.setSpan 非常规探索/</id>
+    <published>2016-07-21T16:00:00.000Z</published>
+    <updated>2016-07-22T10:37:40.000Z</updated>
+    
+    <content type="html">&lt;p&gt;SpannableString或SpannableStringBuilder可以通过SetSpan()方法对一个字符串对象的不同部分设置不同的样式信息，这个想必是人人皆知的。但看似简单的用法，其实里面也有一些小小的算不上坑的坑。&lt;/p&gt;
+&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+&lt;h2 id=&quot;SpannableString&quot;&gt;SpannableString&lt;/h2&gt;&lt;p&gt;SpannableString或SpannableStringBuilder可以通过SetSpan()方法对一个字符串对象的不同部分设置不同的样式信息，这个想必是人人皆知的，like this:&lt;/p&gt;
+&lt;figure class=&quot;highlight java&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;String testString = &lt;span class=&quot;string&quot;&gt;&quot;0123456789&quot;&lt;/span&gt;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;SpannableString spannableString = &lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; SpannableString(testString);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;spannableString.setSpan(&lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; StyleSpan(Typeface.BOLD), &lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;, &lt;span class=&quot;number&quot;&gt;4&lt;/span&gt;, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;spannableString.setSpan(&lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; UnderlineSpan(), &lt;span class=&quot;number&quot;&gt;4&lt;/span&gt;, spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;spanTv.setText(spannableString);&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;这段代码的运行效果就是“0123”加粗显示，“456789”下划线显示，酱紫: &lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://7u2h4k.com1.z0.glb.clouddn.com/device-2016-07-22-182058-1.png&quot; alt=&quot;device-2016-07-22-182058-w193&quot;&gt;&lt;/p&gt;
+&lt;p&gt;看似简单的用法，其实里面也有一些小小的算不上坑的坑。&lt;/p&gt;
+&lt;h2 id=&quot;setSpan方法&quot;&gt;setSpan方法&lt;/h2&gt;&lt;p&gt;SpannableString实现了Spannable接口，该接口定义了两个方法，除了setSpan( )还有removeSpan( )。先看下setSpan( )这个方法：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;void setSpan (Object what, int start, int end, int flags)&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://developer.android.com/reference/android/text/Spannable.html#setSpan(java.lang.Object, int, int, int&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;官方解释&lt;/a&gt;)也比较简单，总结为一句话，就是对start~end之间的text附加特定的标记对象（markup object)，这个对象通常是&lt;a href=&quot;https://developer.android.com/reference/android/text/style/CharacterStyle.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;CharacterStyle&lt;/a&gt;，&lt;a href=&quot;https://developer.android.com/reference/android/text/style/ParagraphStyle.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;ParagraphStyle&lt;/a&gt;，&lt;a href=&quot;https://developer.android.com/reference/android/text/TextWatcher.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;TextWatcher&lt;/a&gt;，&lt;a href=&quot;https://developer.android.com/reference/android/text/SpanWatcher.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;SpanWatcher&lt;/a&gt;的子类。（PS：本例使用了StyleSpan和UnderlineSpan均为CharacterStyle的子类，还有各种各样的Span及用法可自行发掘，不在本文讨论范围之内）。官方文档中并没有对参数进行一一解释，可能是觉得太过显而易见？只是在方法说明中带了一嘴：去 Spanned查看各个flags的意义。&lt;br&gt;简单解释一下参数：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Object what: 对应各种Span&lt;/li&gt;
+&lt;li&gt;int start: 指定的Span开始应用的位置索引&lt;/li&gt;
+&lt;li&gt;int end: 指定的Span结束应用的位置索引&lt;/li&gt;
+&lt;li&gt;int flags: &lt;strong&gt;现在只知道是一个标识&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;刚开始使用SpannableString的时候，看到setSpan( )这个方法，会不由自主的理解为，这个里的flags是用来标识要设置Span的起始位置start…end的，很多博客在没有调查清楚的时候也是这么误导读者的，清一色的SPAN_INCLUSIVE_EXCLUSIVE用法。一个偶然的机会，我改了这个参数，发现对于显示效果没有任何的影响，一度以为自己出现了幻觉。&lt;/p&gt;
+&lt;h2 id=&quot;关于flags&quot;&gt;关于flags&lt;/h2&gt;&lt;p&gt;通过查阅接口&lt;a href=&quot;https://developer.android.com/reference/android/text/Spanned.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Spanned&lt;/a&gt;文档，flags标识对于text处理常用的有以下几种常量：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Spanned.SPAN_EXCLUSIVE_EXCLUSIVE：前开后开（do not expand to include text inserted at either their starting or ending point）&lt;/li&gt;
+&lt;li&gt;Spanned.SPAN_EXCLUSIVE_INCLUSIVE：前开后闭（expand to include text inserted at their ending point but not at their starting point）&lt;/li&gt;
+&lt;li&gt;Spanned.SPAN_INCLUSIVE_EXCLUSIVE：前闭后开（expand to include text inserted at their starting point but not at their ending point）&lt;/li&gt;
+&lt;li&gt;Spanned.SPAN_INCLUSIVE_INCLUSIVE：前闭后闭（expand to include text inserted at either their starting or ending point）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;贴上原文，方便感受一下这些flag的真是含义：对于在起点前或者终点后 &lt;strong&gt;插入的（inserted at)&lt;/strong&gt; 文本 扩展/不扩展 应用Span。&lt;/p&gt;
+&lt;p&gt;恍然大悟，这个flags并不是标识我们在构造SpannableString或者SpannableStringBuilder时传入的String Object，而是针对在setSpan( )之后附加到 start 之前 或者 end 之后的文本，是否沿用Span。&lt;/p&gt;
+&lt;h2 id=&quot;场景一&quot;&gt;场景一&lt;/h2&gt;&lt;p&gt;什么情况下可以在setSpan( )之后可以在insert text呢？SpannableString对象和String一样，是不可变对象，那SpannableStringBuilder就和StringBuilder一样是可变的了。新发现一定要试试：&lt;/p&gt;
+&lt;figure class=&quot;highlight java&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;String testString = &lt;span class=&quot;string&quot;&gt;&quot;0123456789&quot;&lt;/span&gt;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;SpannableStringBuilder spannableStringBuilder = &lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; SpannableStringBuilder(testString);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;spannableStringBuilder.setSpan(&lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; StyleSpan(Typeface.BOLD), &lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;, &lt;span class=&quot;number&quot;&gt;4&lt;/span&gt;, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;spannableStringBuilder.setSpan(&lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; UnderlineSpan(), &lt;span class=&quot;number&quot;&gt;4&lt;/span&gt;, spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;spannableStringBuilder.insert(&lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&quot;begin&quot;&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;spannableStringBuilder.append(&lt;span class=&quot;string&quot;&gt;&quot;end&quot;&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;spanTv.setText(spannableStringBuilder);&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;基本设置与前例一致，不同在于，在SpannableStringBuilder设置Span之后，分别在头部和尾部插入了两个字符串文本。由于[0,4)前闭后开，“begin”沿用加粗的Span；而[4,9)也是前闭后开，附加在最后的”end”则不沿用任何Span，酱紫：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://7u2h4k.com1.z0.glb.clouddn.com/device-2016-07-22-181947.png&quot; alt=&quot;device-2016-07-22-181947-w268&quot;&gt;&lt;/p&gt;
+&lt;h2 id=&quot;场景二&quot;&gt;场景二&lt;/h2&gt;&lt;p&gt;再想，如果在代码中去手动insert、append特定文本到特定的位置，那直接在构造的时候就传进去岂不是更方便？似乎不是一个很通用的应用场景。那什么场景可以灵活的在文本的前后中间随意插入呢？ &lt;strong&gt;EditText&lt;/strong&gt;文本输入框。&lt;br&gt;上栗子：&lt;/p&gt;
+&lt;figure class=&quot;highlight java&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;String testString = &lt;span class=&quot;string&quot;&gt;&quot;0123456789&quot;&lt;/span&gt;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;SpannableString spannableString = &lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; SpannableString(testString);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;spannableString.setSpan(&lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; ForegroundColorSpan(ContextCompat.getColor(&lt;span class=&quot;keyword&quot;&gt;this&lt;/span&gt;, R.color.colorGreen)), &lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;, spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;inputEt.setText(spannableString);&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;在“0”之前输入”begin“，在”9“之后输入“end”，酱紫：&lt;br&gt;&lt;img src=&quot;http://7u2h4k.com1.z0.glb.clouddn.com/device-2016-07-22-163752.png&quot; alt=&quot;device-2016-07-22-163752-w335&quot;&gt;&lt;/p&gt;
+&lt;h2 id=&quot;后记&quot;&gt;后记&lt;/h2&gt;&lt;p&gt;至此终于搞清楚了setSpan( )中flags参数的真实含义，过程略绕，因为SpannableString的官方文档对与setSpan( )并没有做任何说明，接口Spannable也只是对该方法的意义略做解释，而flags参数的真正含义却要挖到Spanned接口中对常量的解释。写此文的过程中，发现在SpannableStringBuilder的文档中对该方法有一句话说明：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Mark the specified range of text with the specified object. The flags determine how the span will behave when text is inserted at the start or end of the span’s range.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;其对 flags 进行了解释，就是不知道为什么这句话没有出现在SpannableString的文档中。&lt;/p&gt;
+&lt;p&gt;日常使用没有 &lt;strong&gt;insert&lt;/strong&gt; 需求时，flags只需传 &lt;strong&gt;0&lt;/strong&gt; 即可。&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;SpannableString或SpannableStringBuilder可以通过SetSpan()方法对一个字符串对象的不同部分设置不同的样式信息，这个想必是人人皆知的。但看似简单的用法，其实里面也有一些小小的算不上坑的坑。&lt;/p&gt;
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>Retrofit Doc 译</title>
