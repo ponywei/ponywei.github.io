@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://hellopony.cn/"/>
-  <updated>2018-02-04T07:51:29.518Z</updated>
+  <updated>2018-02-04T07:55:00.537Z</updated>
   <id>http://hellopony.cn/</id>
   
   <author>
@@ -19,10 +19,10 @@
     <title>如何构建一个Media App</title>
     <link href="http://hellopony.cn/2018/02/04/Media%20Session/"/>
     <id>http://hellopony.cn/2018/02/04/Media Session/</id>
-    <published>2018-02-04T07:52:11.441Z</published>
-    <updated>2018-02-04T07:51:29.518Z</updated>
+    <published>2018-02-04T07:55:13.090Z</published>
+    <updated>2018-02-04T07:55:00.537Z</updated>
     
-    <content type="html">&lt;p&gt;在Android系统中构建一个具有多媒体功能App，如果是使用系统的Media Player，那么就需要聊天Android系统对Media的处理流程，会有很多的细节需要开发者关注，比如播放器的各种状态，物理按键的响应等。本文主要是对Android开发者网站API Guide中“Media Apps”章节内容的翻译以及部分个人的理解。&lt;/p&gt;
+    <content type="html">&lt;p&gt;在Android系统中构建一个具有多媒体功能的App，如果是使用系统的Media Player，那么就需要了解Android系统对Media的处理流程，会有很多的细节需要开发者关注，比如播放器的各种状态，物理按键的响应等。本文主要是对Android开发者网站API Guide中“Media Apps”章节内容的翻译以及部分个人的理解。&lt;/p&gt;
 &lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
 &lt;h2 id=&quot;Media_APP_概览&quot;&gt;Media APP 概览&lt;/h2&gt;&lt;h3 id=&quot;Player_和_UI&quot;&gt;Player 和 UI&lt;/h3&gt;&lt;p&gt;一个播放音视频的多媒体App通常包含两个部分：&lt;/p&gt;
 &lt;ol&gt;
@@ -184,7 +184,7 @@
     
     <summary type="html">
     
-      &lt;p&gt;在Android系统中构建一个具有多媒体功能App，如果是使用系统的Media Player，那么就需要聊天Android系统对Media的处理流程，会有很多的细节需要开发者关注，比如播放器的各种状态，物理按键的响应等。本文主要是对Android开发者网站API Guide中“Media Apps”章节内容的翻译以及部分个人的理解。&lt;/p&gt;
+      &lt;p&gt;在Android系统中构建一个具有多媒体功能的App，如果是使用系统的Media Player，那么就需要了解Android系统对Media的处理流程，会有很多的细节需要开发者关注，比如播放器的各种状态，物理按键的响应等。本文主要是对Android开发者网站API Guide中“Media Apps”章节内容的翻译以及部分个人的理解。&lt;/p&gt;
     
     </summary>
     
